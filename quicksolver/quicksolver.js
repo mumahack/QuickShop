@@ -2,13 +2,21 @@ var Random = require("random-js");
 var PF = require('pathfinding');
 require("./Point.js");
 const columns = 30;
+
+
+//var r = new Random(Random.engines.mt19937().autoSeed());
+
+
 module.exports = {
+    r: new Random(Random.engines.mt19937().autoSeed()),
+
     columns: columns,
     map: [[]],
-    startPoint: new Point(0,0),
+    startPoint: new Point(0, 0),
     stopPoint: new Point(columns - 1, columns - 1),
     passPoints: [[]],
     generateMap: function () {
+        this.r = new Random(Random.engines.mt19937().seedWithArray([0x12345678, 0x90abcdef]));
         this.passPoints = [];
         this.generateVoidArray();
 
@@ -20,7 +28,7 @@ module.exports = {
         for (var i = 0; i < 3; i++) {
             var point = this.generateRandomPoint();
             this.setPoint(point, 1);
-            this.passPoints.push(point);
+            //this.passPoints.push(point);
         }
         this.generateNavigationPoints();
 
@@ -39,10 +47,10 @@ module.exports = {
         }
     },
     generateRandomPoint: function () {
-        var r = new Random(Random.engines.mt19937().autoSeed());
-        var x = r.integer(0, this.columns - 1);
-        var y = r.integer(0, this.columns - 1);
-        return new Point(x,y);
+
+        var x = this.r.integer(0, this.columns - 1);
+        var y = this.r.integer(0, this.columns - 1);
+        return new Point(x, y);
     },
     setPoint: function (point, color) {
         this.map[point.x][point.y] = color;
@@ -63,19 +71,30 @@ module.exports = {
             });
     },
     generateNavigationPoints: function () {
-        console.log("Passpoint Lenght:" + this.passPoints.length);
-
-        for (var x = 0; x < this.passPoints.length - 1; x++) {
-            var currentPoint = this.passPoints[x];
-            var nextPoint = this.passPoints[x + 1];
-
-            var navigationPoints = this.solveNavigation(currentPoint, nextPoint);
-            for (var i = 0, len = navigationPoints.length; i < len; i++) {
-
-                //this.setPoint(navigationPoints[i], 4);
+        //console.log("Passpoint Lenght:" + this.passPoints.length);
+        var costMatrix = [[]];
+        for (var passPointNr1 = 0; passPointNr1 < this.passPoints.length; passPointNr1++) {
+            var currentPoint = this.passPoints[passPointNr1];
+            for (var passPointNr2 = 0; passPointNr2 < this.passPoints.length; passPointNr2++) {
+                var targetPoint = this.passPoints[passPointNr2];
+                if (passPointNr1 == passPointNr2) {
+                    // Do Nothing...
+                } else {
+                    var navigationPoints = this.solveNavigation(currentPoint, targetPoint);
+                    for (var i = 0, len = navigationPoints.length; i < len; i++) {
+                        var coordinates = navigationPoints[i];
+                        var point = new Point(coordinates[0], coordinates[1]);
+                        currentPoint.addPath(targetPoint,point);
+                    }
+                }
+                // Fill Cost Array:
+                costMatrix[passPointNr1] = costMatrix[passPointNr1] || [];
+                costMatrix[passPointNr1][passPointNr2] = currentPoint.getPathLen(targetPoint);
             }
-
         }
+        console.log(costMatrix);
+
+
 
     },
 

@@ -386,10 +386,18 @@ $.extend(Controller, {
             gridX = coord[0],
             gridY = coord[1],
             grid  = this.grid;
-        
-        $.get("",gridX+";"+gridY);
-        window.alert(gridX + " " + gridY);
-        
+
+        $.get("/setWall", {
+            "x": gridX,
+            "y": gridY
+        });
+        $.get("/setItem", {
+            "x": gridX,
+            "y": gridY
+        });
+
+        //window.alert(gridX + " " + gridY);
+
         if (this.can('dragStart') && this.isStartPos(gridX, gridY)) {
             this.dragStart();
             return;
@@ -516,7 +524,7 @@ $.extend(Controller, {
         this.endX = gridX;
         this.endY = gridY;
         View.setAttributeAt(gridX, gridY, 'end');
-    },    
+    },
     setClosedAt: function(gridX, gridY, walkable) {
         this.grid.setWalkableAt(gridX, gridY, walkable);
         View.setAttributeAt(gridX, gridY, 'closed');

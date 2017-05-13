@@ -20,7 +20,7 @@ app.use(bodyParser.json()) // Parses json, multi-part (file), url-encoded
 
 
 const db = low('db.json');
-var matrix = quickSolver.generateVoidArray();
+var matrix = quickSolver.generateMap();
 
 db.defaults({'matrix': matrix})
     .write()
@@ -34,7 +34,7 @@ app.get('/js/matrix.js', function (req, res) {
 
     db.read();
     var matrix = db.get('matrix').value();
-    var matrix = quickSolver.generateMap();
+    //var matrix = quickSolver.generateMap();
 
     matrix = JSON.stringify(matrix, null, 4);
     matrix = "var matrix = " + matrix;
@@ -42,7 +42,19 @@ app.get('/js/matrix.js', function (req, res) {
     res.send(matrix)
 })
 
-app.get('/navigation', function (req, res) {
+app.get('/setWall', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+
+
+    var query = "matrix[" + y + "][" + x + "]";
+    var oldValue = db.get(query).value();
+    db.set(query, 1).write();
+
+    //console.log(oldValue);
+    //.assign(5).write();
+    res.send(x + " " + y);
+
 
 })
 
