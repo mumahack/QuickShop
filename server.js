@@ -7,7 +7,7 @@ var logger = require('morgan')
 var low = require('lowdb')
 var solver = require('node-tspsolver');
 var app = express()
-var PF = require('pathfinding');
+
 var quickSolver = require('./quicksolver/quicksolver.js');
 //console.log(quickSolver.generateVoidArray());
 
@@ -34,7 +34,7 @@ app.get('/js/matrix.js', function (req, res) {
 
     db.read();
     var matrix = db.get('matrix').value();
-    var matrix = quickSolver.generateVoidArray();
+    var matrix = quickSolver.generateMap();
 
     matrix = JSON.stringify(matrix, null, 4);
     matrix = "var matrix = " + matrix;
