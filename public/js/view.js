@@ -52,8 +52,8 @@ var View = {
     },
     supportedOperations: ['opened', 'closed', 'tested'],
     init: function(opts) {
-        this.numRows      = matrix.length; //opts.numCols;
-        this.numCols      = matrix[0].length; //opts.numRows;
+        this.numRows      = matrix.length;
+        this.numCols      = matrix[0].length;
         this.paper        = Raphael('draw_area');
         this.$stats       = $('#stats');
     },
@@ -115,34 +115,6 @@ var View = {
             }
         });
     },
-    setStartPos: function(gridX, gridY) {
-        var coord = this.toPageCoordinate(gridX, gridY);
-        if (!this.startNode) {
-            this.startNode = this.paper.rect(
-                coord[0],
-                coord[1],
-                this.nodeSize,
-                this.nodeSize
-            ).attr(this.nodeStyle.normal)
-             .animate(this.nodeStyle.start, 1000);
-        } else {
-            this.startNode.attr({ x: coord[0], y: coord[1] }).toFront();
-        }
-    },
-    setEndPos: function(gridX, gridY) {
-        var coord = this.toPageCoordinate(gridX, gridY);
-        if (!this.endNode) {
-            this.endNode = this.paper.rect(
-                coord[0],
-                coord[1],
-                this.nodeSize,
-                this.nodeSize
-            ).attr(this.nodeStyle.normal)
-             .animate(this.nodeStyle.end, 1000);
-        } else {
-            this.endNode.attr({ x: coord[0], y: coord[1] }).toFront();
-        }
-    },
     /**
      * Set the attribute of the node at the given coordinate.
      */
@@ -159,6 +131,14 @@ var View = {
             break;
         case 'closed':
             this.colorizeNode(this.rects[gridY][gridX], nodeStyle.closed.fill);
+            this.setCoordDirty(gridX, gridY, true);
+            break;
+        case 'start':
+            this.colorizeNode(this.rects[gridY][gridX], nodeStyle.start.fill);
+            this.setCoordDirty(gridX, gridY, true);
+            break;
+        case 'end':
+            this.colorizeNode(this.rects[gridY][gridX], nodeStyle.end.fill);
             this.setCoordDirty(gridX, gridY, true);
             break;
         case 'tested':

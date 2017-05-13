@@ -478,18 +478,42 @@ $.extend(Controller, {
         centerX = Math.ceil(availWidth / 2 / nodeSize);
         centerY = Math.floor(height / 2 / nodeSize);
 
-        this.setStartPos(centerX - 5, centerY);
-        this.setEndPos(centerX + 5, centerY);
+        var numRows = matrix.length;
+        var numCols = matrix[0].length;
+        for (j = 0; j < numRows; j++) {
+            for(i = 0; i < numCols; i++) {
+                switch (matrix[j][i])
+                {
+                    case 1:
+                        this.setClosedAt(i,j);
+                    break;
+                    case 2:
+                        this.setStartPos(i,j);
+                    break;
+                    case 3:
+                        this.setEndPos(i,j);
+                    break;
+                    case 4:
+                        this.setWalkableAt(i,j,false);
+                    break;
+                }
+
+            }
+        }
     },
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
-        View.setStartPos(gridX, gridY);
+        View.setAttributeAt(gridX, gridY, 'start');
     },
     setEndPos: function(gridX, gridY) {
         this.endX = gridX;
         this.endY = gridY;
-        View.setEndPos(gridX, gridY);
+        View.setAttributeAt(gridX, gridY, 'end');
+    },    
+    setClosedAt: function(gridX, gridY, walkable) {
+        this.grid.setWalkableAt(gridX, gridY, walkable);
+        View.setAttributeAt(gridX, gridY, 'closed');
     },
     setWalkableAt: function(gridX, gridY, walkable) {
         this.grid.setWalkableAt(gridX, gridY, walkable);
