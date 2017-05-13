@@ -29,6 +29,10 @@ var View = {
             fill: '#afeeee',
             'stroke-opacity': 0.2,
         },
+        path: {
+            fill: '#f4ed7c',
+            'stroke-opacity': 0.2,
+        },
         failed: {
             fill: '#ff8888',
             'stroke-opacity': 0.2,
@@ -141,6 +145,9 @@ var View = {
             this.colorizeNode(this.rects[gridY][gridX], nodeStyle.end.fill);
             this.setCoordDirty(gridX, gridY, true);
             break;
+        case 'path':
+            this.colorizeNode(this.rects[gridY][gridX], nodeStyle.path.fill);
+            break;    
         case 'tested':
             color = (value === true) ? nodeStyle.tested.fill : nodeStyle.normal.fill;
 
