@@ -1,7 +1,8 @@
+var Random = require("random-js");
 module.exports = {
 
     generateVoidArray: function () {
-        var columns = 64;
+        var columns = 10;
         var width = columns;
         var height  = columns;
         var map = [
@@ -10,10 +11,24 @@ module.exports = {
         for (var x = 0; x < width; x++) {
             map[x] = [];
             for (var y = 0; y < height; y++) {
-                map[x][y] = [0];
+                map[x][y] = 0;
             }
         }
+
+
+
+        var r = new Random(Random.engines.mt19937().autoSeed());
+
+
+        for (var i = 0; i < 3; i++) {
+            var x = r.integer(0, columns -1 )  ;
+            var y = r.integer(0, columns -1);
+            map[x][y] = 1;
+        }
+
+
         return map;
+
 
     },
     setup: function () {

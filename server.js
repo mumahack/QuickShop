@@ -34,6 +34,8 @@ app.get('/js/matrix.js', function (req, res) {
 
     db.read();
     var matrix = db.get('matrix').value();
+    var matrix = quickSolver.generateVoidArray();
+
     matrix = JSON.stringify(matrix, null, 4);
     matrix = "var matrix = " + matrix;
 
