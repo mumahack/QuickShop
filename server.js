@@ -49,7 +49,12 @@ app.get('/setWall', function (req, res) {
 
     var query = "matrix[" + y + "][" + x + "]";
     var oldValue = db.get(query).value();
-    db.set(query, 1).write();
+    if(oldValue == 1){
+        db.set(query, 0).write();
+    }else {
+        db.set(query, 1).write();
+    }
+
 
     //console.log(oldValue);
     //.assign(5).write();
