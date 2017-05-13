@@ -386,7 +386,10 @@ $.extend(Controller, {
             gridX = coord[0],
             gridY = coord[1],
             grid  = this.grid;
-
+        
+        $.get("",gridX+";"+gridY);
+        window.alert(gridX + " " + gridY);
+        
         if (this.can('dragStart') && this.isStartPos(gridX, gridY)) {
             this.dragStart();
             return;
