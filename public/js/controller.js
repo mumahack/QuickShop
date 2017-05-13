@@ -496,6 +496,9 @@ $.extend(Controller, {
                     case 4:
                         this.setWalkableAt(i,j,false);
                     break;
+                    case 5:
+                        this.setPathAt(i,j);
+                    break;
                 }
 
             }
@@ -518,6 +521,9 @@ $.extend(Controller, {
     setWalkableAt: function(gridX, gridY, walkable) {
         this.grid.setWalkableAt(gridX, gridY, walkable);
         View.setAttributeAt(gridX, gridY, 'walkable', walkable);
+    },
+    setPathAt: function(gridX, gridY) {
+         View.setAttributeAt(gridX, gridY, 'path');
     },
     isStartPos: function(gridX, gridY) {
         return gridX === this.startX && gridY === this.startY;
