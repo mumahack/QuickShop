@@ -17,7 +17,7 @@ module.exports = {
     stopPoint: new Point(columns - 1, columns - 1),
     passPoints: [[]],
     itemPoints: [],
-    solvingMatrix: [],
+    solvingMatrix: [[]],
 
     generateRandomPoints: function () {
         for (var i = 0; i < 3; i++) {
@@ -27,8 +27,12 @@ module.exports = {
         }
     },
     loadMap: function (map) {
-        this.passPoints = [];
         this.map = map;
+        if(map[0].length== 0){
+            this.generateVoidArray();
+        }
+        this.passPoints = [];
+
         var width = this.columns;
         var height = this.columns;
 
@@ -37,6 +41,13 @@ module.exports = {
             this.solvingMatrix[x] = [];
             for (var y = 0; y < height; y++) {
                 this.solvingMatrix[x][y] = 0;
+            }
+        }
+
+
+
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
                 switch (this.map[x][y]) {
                     case 1:
                     case 2:
@@ -48,7 +59,7 @@ module.exports = {
                         this.map[x][y] = 0;
                         break;
                     case 3:
-                        this.solvingMatrix[x][y] = 1;
+                        this.solvingMatrix[y][x] = 1;
                         break;
                 }
 
@@ -87,7 +98,6 @@ module.exports = {
         return this.map;
     },
     generateVoidArray: function () {
-        var columns = 10;
         var width = this.columns;
         var height = this.columns;
         for (var x = 0; x < width; x++) {
@@ -125,6 +135,9 @@ module.exports = {
             });
     },
     generateNavigationPoints: function () {
+        if(this.passPoints.length == 0){
+            return;
+        }
         //console.log("Passpoint Lenght:" + this.passPoints.length);
 
         var costMatrix = [[]];
@@ -191,12 +204,13 @@ module.exports = {
     solveNavigation: function (point1, point2) {
 
         var grid = new PF.Grid(this.solvingMatrix);
+        console.log("Matrix:");
         console.log(this.solvingMatrix);
-        //console.log(point1[0], point1[1], point2[0], point2[1]);
+        console.log(point1.x, point1.y, point2.x, point2.y);
         var finder = new PF.AStarFinder();
         var pointsArr = finder.findPath(point1.x, point1.y, point2.x, point2.y, grid);
         //console.log("PointsArr");
-        //console.log(pointsArr);
+        console.log(pointsArr);
         //console.log("PointsArr End");
         return pointsArr;
     }
