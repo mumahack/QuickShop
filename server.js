@@ -89,7 +89,6 @@ app.get('/new', function (req, res) {
 })
 app.get('/calculate', function (req, res) {
 
-
 })
 
 app.use(express.static('public'));

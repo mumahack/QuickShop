@@ -177,7 +177,7 @@ module.exports = {
             var currentPathLen = 0;
 
             if (!(combination[0].getHash() == this.startPoint.getHash() && combination[combination.length - 1].getHash() == this.stopPoint.getHash())) {
-                continue;
+                //continue;
             }
 
             for (var elementCounter = 0; elementCounter < combination.length - 1; elementCounter++) {
