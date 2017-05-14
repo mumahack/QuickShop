@@ -2,7 +2,7 @@ var Random = require("random-js");
 var PF = require('pathfinding');
 require("./Point.js");
 var solver = require('node-tspsolver');
-const columns = 30;
+const columns = 5;
 
 
 //var r = new Random(Random.engines.mt19937().autoSeed());
@@ -16,27 +16,43 @@ module.exports = {
     startPoint: new Point(0, 0),
     stopPoint: new Point(columns - 1, columns - 1),
     passPoints: [[]],
-    itemPoints : [],
+    itemPoints: [],
+    solvingMatrix: [],
 
-    generateRandomPoints : function () {
+    generateRandomPoints: function () {
         for (var i = 0; i < 3; i++) {
             var point = this.generateRandomPoint();
             this.passPoints.push(point);
             this.itemPoints.push(point);
         }
     },
-    loadMap : function (map) {
+    loadMap: function (map) {
         this.passPoints = [];
         this.map = map;
         var width = this.columns;
         var height = this.columns;
-        for (var x = 0; x < width; x++) {
 
+
+        for (var x = 0; x < width; x++) {
+            this.solvingMatrix[x] = [];
             for (var y = 0; y < height; y++) {
-                if(this.map[x][y] == 1 || this.map[x][y] == 2){
-                    var point = new Point(x, y);
-                    this.passPoints.push(point);
+                this.solvingMatrix[x][y] = 0;
+                switch (this.map[x][y]) {
+                    case 1:
+                    case 2:
+                    case 4:
+                        var point = new Point(x, y);
+                        this.passPoints.push(point);
+                        break;
+                    case 5:
+                        this.map[x][y] = 0;
+                        break;
+                    case 3:
+                        this.solvingMatrix[x][y] = 1;
+                        break;
                 }
+
+
             }
         }
         this.generateNavigationPoints();
@@ -52,7 +68,6 @@ module.exports = {
         //this.generateVoidArray();
 
 
-
         //this.passPoints.push(this.startPoint);
         //this.passPoints.push(this.stopPoint);
         //this.passPoints.push(this.stopPoint);
@@ -60,18 +75,13 @@ module.exports = {
         //this.generateNavigationPoints();
 
         /*
-        for (var i = 0; i < this.itemPoints.length; i++) {
-            var point = this.itemPoints[i];
-            this.setPoint(point, 1);
-        }
-        */
+         for (var i = 0; i < this.itemPoints.length; i++) {
+         var point = this.itemPoints[i];
+         this.setPoint(point, 1);
+         }
+         */
         //this.setPoint(this.startPoint, 2);
         //this.setPoint(this.stopPoint, 3);
-
-
-
-
-
 
 
         return this.map;
@@ -94,7 +104,7 @@ module.exports = {
         return new Point(x, y);
     },
     setPoint: function (point, color) {
-        if(this.map[point.x][point.y] == 0){
+        if (this.map[point.x][point.y] == 0) {
             this.map[point.x][point.y] = color;
         }
 
@@ -179,17 +189,9 @@ module.exports = {
     },
 
     solveNavigation: function (point1, point2) {
-        var width = this.columns;
-        var height = this.columns;
-        var matrix = [];
 
-        for (var x = 0; x < width; x++) {
-            matrix[x] = [];
-            for (var y = 0; y < height; y++) {
-                matrix[x][y] = 0;
-            }
-        }
-        var grid = new PF.Grid(matrix);
+        var grid = new PF.Grid(this.solvingMatrix);
+        console.log(this.solvingMatrix);
         //console.log(point1[0], point1[1], point2[0], point2[1]);
         var finder = new PF.AStarFinder();
         var pointsArr = finder.findPath(point1.x, point1.y, point2.x, point2.y, grid);
