@@ -27,6 +27,13 @@
     <script type="text/javascript" src="./js/controller.js"></script>
     <script type="text/javascript" src="./js/panel.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
+    <script>
+       function toggleoverlay()
+       {
+          var lTable = document.getElementById("overlay");
+          lTable.style.display = (lTable.style.display == "none") ? "block" : "none";
+        }
+    </script>
   </head>
   <body>
     <div id="draw_area" class="left_panel"></div>
@@ -41,9 +48,12 @@
         <label style="font-size: 25px;"><input type="radio" name="selectionRadio" id="selectedStartPos"> Entrance</label><br>
         <label style="font-size: 25px;"><input type="radio" name="selectionRadio" id="selectedEndPos"> Exit</label><br>
       </form>
-      <br>
+      <br><br>
       <button onclick="$.get('/new') && location.reload()">New</button><br><br>
       <button onclick="location.reload()">Calculate</button>
+      <br><br><br><br>
+      <button onclick="toggleoverlay()">Statistics</button>
+      <img id="overlay" src="css/overlay.png" style="position: absolute; margin:0px;left:0px; top: -145px;height: 1090px; display: none">
     </div>
 
    </body>
