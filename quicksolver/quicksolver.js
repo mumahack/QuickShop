@@ -2,7 +2,7 @@ var Random = require("random-js");
 var PF = require('pathfinding');
 require("./Point.js");
 var solver = require('node-tspsolver');
-const columns = 5;
+const columns = 30;
 
 
 //var r = new Random(Random.engines.mt19937().autoSeed());
@@ -28,7 +28,7 @@ module.exports = {
     },
     loadMap: function (map) {
         this.map = map;
-        if(map[0].length== 0){
+        if (map[0].length == 0) {
             this.generateVoidArray();
         }
         this.passPoints = [];
@@ -45,14 +45,19 @@ module.exports = {
         }
 
 
-
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
+                var point = new Point(x, y);
                 switch (this.map[x][y]) {
                     case 1:
+                        this.passPoints.push(point);
+                        this.startPoint = point;
+                        break;
                     case 2:
+                        this.passPoints.push(point);
+                        this.stopPoint = point;
+                        break;
                     case 4:
-                        var point = new Point(x, y);
                         this.passPoints.push(point);
                         break;
                     case 5:
@@ -66,6 +71,8 @@ module.exports = {
 
             }
         }
+        console.log("First Point: " + this.startPoint.getHash()  + " StopPoint: "+ this.stopPoint.getHash() + " passpoints:" + + this.passPoints)
+
         this.generateNavigationPoints();
 
         return this.map;
@@ -135,7 +142,7 @@ module.exports = {
             });
     },
     generateNavigationPoints: function () {
-        if(this.passPoints.length == 0){
+        if (this.passPoints.length == 0) {
             return;
         }
         //console.log("Passpoint Lenght:" + this.passPoints.length);
@@ -169,11 +176,16 @@ module.exports = {
         var shortestCombination;
         for (var combinationNumber = 0; combinationNumber < cmb.length - 1; combinationNumber++) {
             var combination = cmb[combinationNumber];
-
             var currentPathLen = 0;
+
+            if (combination[0].getHash() !== this.startPoint.getHash() || combination[combination.length-1].getHash() !== this.stopPoint.getHash()) {
+                continue;
+            }
+
             for (var elementCounter = 0; elementCounter < combination.length - 1; elementCounter++) {
                 currentPoint = combination[elementCounter];
                 targetPoint = combination[elementCounter + 1];
+                console.log("Element counter" + elementCounter + " First point:"+ currentPoint.getHash() + "  start point:" + this.startPoint.getHash());
                 currentPathLen += currentPoint.getPathLen(targetPoint);
             }
             if (currentPathLen < shortestPath) {
@@ -204,13 +216,13 @@ module.exports = {
     solveNavigation: function (point1, point2) {
 
         var grid = new PF.Grid(this.solvingMatrix);
-        console.log("Matrix:");
-        console.log(this.solvingMatrix);
-        console.log(point1.x, point1.y, point2.x, point2.y);
+        //console.log("Matrix:");
+        //console.log(this.solvingMatrix);
+        //console.log(point1.x, point1.y, point2.x, point2.y);
         var finder = new PF.AStarFinder();
         var pointsArr = finder.findPath(point1.x, point1.y, point2.x, point2.y, grid);
         //console.log("PointsArr");
-        console.log(pointsArr);
+        //console.log(pointsArr);
         //console.log("PointsArr End");
         return pointsArr;
     }
