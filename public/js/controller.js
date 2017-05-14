@@ -387,16 +387,6 @@ $.extend(Controller, {
             gridY = coord[1],
             grid  = this.grid;
         
-        //$.get("/setWall", {
-        //    "x": gridX,
-        //    "y": gridY
-        //});
-        //$.get("/setItem", {
-        //    "x": gridX,
-        //    "y": gridY
-        //});
-        //window.alert(gridX + " " + gridY);
-
         if (this.can('dragStart') && this.isStartPos(gridX, gridY)) {
             this.dragStart();
             return;
@@ -487,16 +477,16 @@ $.extend(Controller, {
                 switch (matrix[j][i])
                 {
                     case 1:
-                        this.setClosedAt(i,j);
-                    break;
-                    case 2:
                         this.setStartPos(i,j);
                     break;
-                    case 3:
+                    case 2:
                         this.setEndPos(i,j);
                     break;
+                    case 3:
+                        this.setWallAt(i,j);
+                    break;
                     case 4:
-                        this.setWalkableAt(i,j,false);
+                        this.setItemAt(i,j);
                     break;
                     case 5:
                         this.setPathAt(i,j);
@@ -510,16 +500,32 @@ $.extend(Controller, {
     {
         if(document.getElementById('selectedWall').checked)
         {
-            this.setClosedAt(gridX, gridY, false);
+            this.setWallAt(gridX, gridY);
             $.get("/setWall", {
                 "x": gridX,
                 "y": gridY
             });
         }
-        else
+        if(document.getElementById('selectedItem').checked)
         {
-            this.setWalkableAt(gridX, gridY, false);
+            this.setItemAt(gridX, gridY);
             $.get("/setItem", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        if(document.getElementById('selectedStartPos').checked)
+        {
+            this.setStartPos(gridX, gridY);
+            $.get("/setStartPos", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        if(document.getElementById('selectedEndPos').checked)
+        {
+            this.setEndPos(gridX, gridY);
+            $.get("/setEndPos", {
                 "x": gridX,
                 "y": gridY
             });
@@ -527,7 +533,7 @@ $.extend(Controller, {
     },
     eraseWallorItem: function(gridX, gridY)
     {
-        this.setWalkableAt(gridX, gridY, true);
+        this.setNormalAt(gridX, gridY);
         if(document.getElementById('selectedWall').checked)
         {   
             $.get("/eraseWall", {
@@ -535,31 +541,63 @@ $.extend(Controller, {
                 "y": gridY
             });
         }
-        else
-        {   
+        if(document.getElementById('selectedItem').checked)
+        {
             $.get("/eraseItem", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        if(document.getElementById('selectedStartPos').checked)
+        {
+            $.get("/eraseStartPos", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        if(document.getElementById('selectedEndPos').checked)
+        {
+            $.get("/eraseEndPos", {
                 "x": gridX,
                 "y": gridY
             });
         }
     },
     setStartPos: function(gridX, gridY) {
+        if(this.startX) {
+            this.setNormalAt(this.startX,this.startY);
+            $.get("/eraseStartPos", {
+                    "x": this.startX,
+                    "y": this.startY
+                });
+        }
         this.startX = gridX;
         this.startY = gridY;
         View.setAttributeAt(gridX, gridY, 'start');
     },
     setEndPos: function(gridX, gridY) {
+        if(this.endX) {
+            this.setNormalAt(this.endX, this.endY);
+            $.get("/eraseEndPos", {
+                    "x": this.endX,
+                    "y": this.endY
+                });
+        }
         this.endX = gridX;
         this.endY = gridY;
         View.setAttributeAt(gridX, gridY, 'end');
     },
-    setClosedAt: function(gridX, gridY, walkable) {
-        this.grid.setWalkableAt(gridX, gridY, walkable);
+    setWallAt: function(gridX, gridY) {
+        this.grid.setWalkableAt(gridX, gridY, false);
         View.setAttributeAt(gridX, gridY, 'closed');
     },
-    setWalkableAt: function(gridX, gridY, walkable) {
-        this.grid.setWalkableAt(gridX, gridY, walkable);
-        View.setAttributeAt(gridX, gridY, 'walkable', walkable);
+    setItemAt: function(gridX, gridY) {
+        this.grid.setWalkableAt(gridX, gridY, false);
+        View.setAttributeAt(gridX, gridY, 'opened');
+    },
+    setNormalAt: function(gridX, gridY) {
+        this.grid.setWalkableAt(gridX, gridY, true);
+        View.setAttributeAt(gridX, gridY, 'normal');
     },
     setPathAt: function(gridX, gridY) {
          View.setAttributeAt(gridX, gridY, 'path');

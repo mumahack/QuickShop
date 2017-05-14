@@ -33,12 +33,17 @@
 
     <div class="right_panel">
       <h1>Quick Shop</h1>
-      <h3>Shopping experience optimizer</h3>
-
+      <h3>Shopping optimizer</h3>
+      <br>
       <form action="">
-        <input type="radio" name="selectionRadio" id="selectedWall" checked> Wall<br>
-        <input type="radio" name="selectionRadio" id="selectedItem"> Item<br>
+        <input type="radio" name="selectionRadio" id="selectedWall" checked><label style="font-size: 25px;"> Wall</label><br>
+        <input type="radio" name="selectionRadio" id="selectedItem"><label style="font-size: 25px;"> Item</label><br>
+        <input type="radio" name="selectionRadio" id="selectedStartPos"><label style="font-size: 25px;"> Entrance</label><br>
+        <input type="radio" name="selectionRadio" id="selectedEndPos"><label style="font-size: 25px;"> Exit</label><br>
       </form>
+      <br>
+      <button onclick="$.get('/new');">New</button><br><br>
+      <button onclick="$.get('/calculate');">Calculate</button>
     </div>
 
    </body>
