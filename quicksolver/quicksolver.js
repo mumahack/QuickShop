@@ -16,23 +16,37 @@ module.exports = {
     startPoint: new Point(0, 0),
     stopPoint: new Point(0, 5),
     passPoints: [[]],
+    itemPoints : [],
     generateMap: function () {
-        this.r = new Random(Random.engines.mt19937().seedWithArray([0x12345678, 0x90abcdef]));
+        //this.r = new Random(Random.engines.mt19937().seedWithArray([0x12345678, 0x90abcdef]));
+        this.r = new Random(Random.engines.mt19937().autoSeed());
+
         this.passPoints = [];
         this.generateVoidArray();
 
 
-        this.setPoint(this.startPoint, 2);
-        this.setPoint(this.stopPoint, 3);
+
         this.passPoints.push(this.startPoint);
         this.passPoints.push(this.stopPoint);
         //this.passPoints.push(this.stopPoint);
         for (var i = 0; i < 3; i++) {
             var point = this.generateRandomPoint();
-            this.setPoint(point, 1);
             this.passPoints.push(point);
+            this.itemPoints.push(point);
         }
         this.generateNavigationPoints();
+
+        for (var i = 0; i < this.itemPoints.length; i++) {
+            var point = this.itemPoints[i];
+            this.setPoint(point, 1);
+        }
+        this.setPoint(this.startPoint, 2);
+        this.setPoint(this.stopPoint, 3);
+
+
+
+
+
 
 
         return this.map;
@@ -97,28 +111,41 @@ module.exports = {
                 costMatrix[passPointNr1][passPointNr2] = currentPoint.getPathLen(targetPoint);
             }
         }
+        // Find all Combinations:
+        var Combinatorics = require('js-combinatorics');
+        var cmb = Combinatorics.permutation(this.passPoints).toArray();
+        var shortestPath = 1000000;
+        var shortestCombination;
+        for (var combinationNumber = 0; combinationNumber < cmb.length - 1; combinationNumber++) {
+            var combination = cmb[combinationNumber];
 
-        var self = this;
-        solver
-            .solveTsp(costMatrix, true, {})
-            .then(function (result) {
+            var currentPathLen = 0;
+            for (var elementCounter = 0; elementCounter < combination.length - 1; elementCounter++) {
+                currentPoint = combination[elementCounter];
+                targetPoint = combination[elementCounter + 1];
+                currentPathLen += currentPoint.getPathLen(targetPoint);
+            }
+            if (currentPathLen < shortestPath) {
+                shortestPath = currentPathLen;
+                shortestCombination = combination;
+            }
 
+        }
+        // Find the shortest Path:
 
-                //console.log(result);
-                for (var i = 0, len = result.length - 1; i < len; i++) {
+        //console.log(shortestPath);
+        //console.log(shortestCombination);
 
-                    var currentPointID = result[i];
-                    var targetPointID = result[i + 1];
+        // Add the Shortest Path to the Map:
+        for (var elementCounter = 0; elementCounter < shortestCombination.length - 1; elementCounter++) {
 
-                    var currentPoint = self.passPoints[currentPointID];
-                    var targetPoint = self.passPoints[targetPointID];
-                    var paths = currentPoint.getPaths(targetPoint);
-                    for (var pathId = 0; pathId < paths.length; pathId++) {
-                        self.setPoint(paths[pathId], 5);
-                    }
-                }
-
-            });
+            currentPoint = combination[elementCounter];
+            targetPoint = combination[elementCounter + 1];
+            var paths = currentPoint.getPaths(targetPoint);
+            for (var pathId = 0; pathId < paths.length; pathId++) {
+                this.setPoint(paths[pathId], 5);
+            }
+        }
 
 
     },
