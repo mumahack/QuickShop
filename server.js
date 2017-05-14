@@ -34,7 +34,7 @@ app.get('/js/matrix.js', function (req, res) {
 
     db.read();
     var matrix = db.get('matrix').value();
-    var matrix = quickSolver.generateMap();
+    //var matrix = quickSolver.generateMap();
 
     matrix = JSON.stringify(matrix, null, 4);
     matrix = "var matrix = " + matrix;
@@ -46,7 +46,7 @@ app.get('/setWall', function (req, res) {
     var x = req.param('x');
     var y = req.param('y');
     var query = "matrix[" + y + "][" + x + "]";
-    db.set(query, 1).write();
+    db.set(query, 3).write();
     res.send(x + " " + y);
 })
 
@@ -65,6 +65,34 @@ app.get('/eraseWall', function (req, res) {
     res.send(x + " " + y);
 })
 app.get('/eraseItem', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 0).write();
+    res.send(x + " " + y);
+})
+app.get('/setStartPos', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 1).write();
+    res.send(x + " " + y);
+})
+app.get('/setEndPos', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 2).write();
+    res.send(x + " " + y);
+})
+app.get('/eraseStartPos', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 0).write();
+    res.send(x + " " + y);
+})
+app.get('/eraseEndPos', function (req, res) {
     var x = req.param('x');
     var y = req.param('y');
     var query = "matrix[" + y + "][" + x + "]";

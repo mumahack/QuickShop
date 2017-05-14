@@ -14,9 +14,17 @@ module.exports = {
     columns: columns,
     map: [[]],
     startPoint: new Point(0, 0),
-    stopPoint: new Point(0, 5),
+    stopPoint: new Point(columns - 1, columns - 1),
     passPoints: [[]],
     itemPoints : [],
+
+    generateRandomPoints : function () {
+        for (var i = 0; i < 3; i++) {
+            var point = this.generateRandomPoint();
+            this.passPoints.push(point);
+            this.itemPoints.push(point);
+        }
+    },
     generateMap: function () {
         //this.r = new Random(Random.engines.mt19937().seedWithArray([0x12345678, 0x90abcdef]));
         this.r = new Random(Random.engines.mt19937().autoSeed());
@@ -26,22 +34,20 @@ module.exports = {
 
 
 
-        this.passPoints.push(this.startPoint);
-        this.passPoints.push(this.stopPoint);
+        //this.passPoints.push(this.startPoint);
         //this.passPoints.push(this.stopPoint);
-        for (var i = 0; i < 3; i++) {
-            var point = this.generateRandomPoint();
-            this.passPoints.push(point);
-            this.itemPoints.push(point);
-        }
-        this.generateNavigationPoints();
+        //this.passPoints.push(this.stopPoint);
 
+        //this.generateNavigationPoints();
+
+        /*
         for (var i = 0; i < this.itemPoints.length; i++) {
             var point = this.itemPoints[i];
             this.setPoint(point, 1);
         }
-        this.setPoint(this.startPoint, 2);
-        this.setPoint(this.stopPoint, 3);
+        */
+        //this.setPoint(this.startPoint, 2);
+        //this.setPoint(this.stopPoint, 3);
 
 
 
