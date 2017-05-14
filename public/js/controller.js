@@ -534,34 +534,10 @@ $.extend(Controller, {
     eraseWallorItem: function(gridX, gridY)
     {
         this.setNormalAt(gridX, gridY);
-        if(document.getElementById('selectedWall').checked)
-        {   
-            $.get("/eraseWall", {
-                "x": gridX,
-                "y": gridY
-            });
-        }
-        if(document.getElementById('selectedItem').checked)
-        {
-            $.get("/eraseItem", {
-                "x": gridX,
-                "y": gridY
-            });
-        }
-        if(document.getElementById('selectedStartPos').checked)
-        {
-            $.get("/eraseStartPos", {
-                "x": gridX,
-                "y": gridY
-            });
-        }
-        if(document.getElementById('selectedEndPos').checked)
-        {
-            $.get("/eraseEndPos", {
-                "x": gridX,
-                "y": gridY
-            });
-        }
+        $.get("/erase", {
+            "x": gridX,
+            "y": gridY
+        });
     },
     setStartPos: function(gridX, gridY) {
         if(this.startX) {

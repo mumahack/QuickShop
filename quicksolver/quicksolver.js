@@ -197,13 +197,15 @@ module.exports = {
         //console.log(shortestCombination);
 
         // Add the Shortest Path to the Map:
-        for (var elementCounter = 0; elementCounter < shortestCombination.length - 1; elementCounter++) {
+        if(shortestCombination)  {
+            for (var elementCounter = 0; elementCounter < shortestCombination.length - 1; elementCounter++) {
 
-            currentPoint = combination[elementCounter];
-            targetPoint = combination[elementCounter + 1];
-            var paths = currentPoint.getPaths(targetPoint);
-            for (var pathId = 0; pathId < paths.length; pathId++) {
-                this.setPoint(paths[pathId], 5);
+                currentPoint = combination[elementCounter];
+                targetPoint = combination[elementCounter + 1];
+                var paths = currentPoint.getPaths(targetPoint);
+                for (var pathId = 0; pathId < paths.length; pathId++) {
+                    this.setPoint(paths[pathId], 5);
+                }
             }
         }
 

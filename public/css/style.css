@@ -41,11 +41,12 @@ h3 {
 
 .left_panel {
     float:left;
+    width: 500px;
 }
 
 .right_panel {
    float:right;
-   width: 600px;
+   width: 40%;
 }
 
 #instructions_panel {

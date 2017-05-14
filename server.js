@@ -58,20 +58,6 @@ app.get('/setItem', function (req, res) {
     db.set(query, 4).write();
     res.send(x + " " + y);
 })
-app.get('/eraseWall', function (req, res) {
-    var x = req.param('x');
-    var y = req.param('y');
-    var query = "matrix[" + y + "][" + x + "]";
-    db.set(query, 0).write();
-    res.send(x + " " + y);
-})
-app.get('/eraseItem', function (req, res) {
-    var x = req.param('x');
-    var y = req.param('y');
-    var query = "matrix[" + y + "][" + x + "]";
-    db.set(query, 0).write();
-    res.send(x + " " + y);
-})
 app.get('/setStartPos', function (req, res) {
     var x = req.param('x');
     var y = req.param('y');
@@ -86,25 +72,22 @@ app.get('/setEndPos', function (req, res) {
     db.set(query, 2).write();
     res.send(x + " " + y);
 })
-app.get('/eraseStartPos', function (req, res) {
+app.get('/erase', function (req, res) {
     var x = req.param('x');
     var y = req.param('y');
     var query = "matrix[" + y + "][" + x + "]";
     db.set(query, 0).write();
     res.send(x + " " + y);
 })
-app.get('/eraseEndPos', function (req, res) {
-    var x = req.param('x');
-    var y = req.param('y');
-    var query = "matrix[" + y + "][" + x + "]";
-    db.set(query, 0).write();
-    res.send(x + " " + y);
+app.get('/new', function (req, res) {
+    for (var x = 0; x < 30; x++) {
+        for (var y = 0; y < 30; y++) {
+            var query = "matrix[" + y + "][" + x + "]";
+            db.set(query, 0).write();
+        }
+    }
 })
-
-
-
-
-app.get('/solver', function (req, res) {
+app.get('/calculate', function (req, res) {
 
 
 })
