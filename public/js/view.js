@@ -10,8 +10,8 @@ var View = {
             'stroke-opacity': 0.2, // the border
         },
         blocked: {
-            fill: '#afeeee',
-            'stroke-opacity': 0.2,
+            fill: '#98fb98',
+           'stroke-opacity': 0.2,
         },
         start: {
             fill: '#0d0',
@@ -22,8 +22,8 @@ var View = {
             'stroke-opacity': 0.2,
         },
         opened: {
-            fill: '#98fb98',
-            'stroke-opacity': 0.2,
+             fill: '#afeeee',
+             'stroke-opacity': 0.2,
         },
         closed: {
             fill: 'grey',
@@ -147,7 +147,11 @@ var View = {
             break;
         case 'path':
             this.colorizeNode(this.rects[gridY][gridX], nodeStyle.path.fill);
-            break;    
+            break;
+        case 'normal':
+            this.colorizeNode(this.rects[gridY][gridX], nodeStyle.normal.fill);
+            this.setCoordDirty(gridX, gridY, false);
+            break;
         case 'tested':
             color = (value === true) ? nodeStyle.tested.fill : nodeStyle.normal.fill;
 
