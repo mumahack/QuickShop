@@ -25,12 +25,31 @@ module.exports = {
             this.itemPoints.push(point);
         }
     },
+    loadMap : function (map) {
+        this.passPoints = [];
+        this.map = map;
+        var width = this.columns;
+        var height = this.columns;
+        for (var x = 0; x < width; x++) {
+
+            for (var y = 0; y < height; y++) {
+                if(this.map[x][y] == 1 || this.map[x][y] == 2){
+                    var point = new Point(x, y);
+                    this.passPoints.push(point);
+                }
+            }
+        }
+        this.generateNavigationPoints();
+
+        return this.map;
+
+    },
     generateMap: function () {
         //this.r = new Random(Random.engines.mt19937().seedWithArray([0x12345678, 0x90abcdef]));
-        this.r = new Random(Random.engines.mt19937().autoSeed());
+        //this.r = new Random(Random.engines.mt19937().autoSeed());
 
-        this.passPoints = [];
-        this.generateVoidArray();
+        //this.passPoints = [];
+        //this.generateVoidArray();
 
 
 
@@ -75,7 +94,10 @@ module.exports = {
         return new Point(x, y);
     },
     setPoint: function (point, color) {
-        this.map[point.x][point.y] = color;
+        if(this.map[point.x][point.y] == 0){
+            this.map[point.x][point.y] = color;
+        }
+
     },
 
     solveTravellerProblem: function () {
