@@ -10,7 +10,7 @@ var View = {
             'stroke-opacity': 0.2, // the border
         },
         blocked: {
-            fill: 'grey',
+            fill: '#afeeee',
             'stroke-opacity': 0.2,
         },
         start: {
@@ -26,7 +26,7 @@ var View = {
             'stroke-opacity': 0.2,
         },
         closed: {
-            fill: '#afeeee',
+            fill: 'grey',
             'stroke-opacity': 0.2,
         },
         path: {

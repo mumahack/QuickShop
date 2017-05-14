@@ -3,11 +3,43 @@
   <head>
     <meta charset="UTF-8">
     <title>Quick Shop</title>
-  </head>
-  <body style="text-align: center;margin:0px;padding:0px;overflow:hidden">
-    <h1>Quick Shop</h1>
-    <h3>Shopping experience optimizer</h3>
 
-    <iframe src="map.html" id="iframemap" frameborder="0" style="margin-left: -10%; overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;" height="100%" width="100%"></iframe>
-  </body>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./lib/themes/jquery.ui.all.css" />
+
+    <script type="text/javascript" src="./lib/raphael-min.js"></script>
+    <script type="text/javascript" src="./lib/es5-shim.min.js"></script>
+    <script type="text/javascript" src="./lib/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="./lib/state-machine.min.js"></script>
+    <script type="text/javascript" src="./lib/async.min.js"></script>
+
+    <script type="text/javascript" src="./lib/ui/jquery.ui.core.min.js"></script>
+    <script type="text/javascript" src="./lib/ui/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="./lib/ui/jquery.ui.mouse.min.js"></script>
+    <script type="text/javascript" src="./lib/ui/jquery.ui.draggable.min.js"></script>
+    <script type="text/javascript" src="./lib/ui/jquery.ui.accordion.min.js"></script>
+    <script type="text/javascript" src="./lib/ui/jquery.ui.slider.min.js"></script>
+
+    <script type="text/javascript" src="./lib/pathfinding-browser.min.js"></script>
+
+    <script type="text/javascript" src="./js/matrix.js"></script>
+    <script type="text/javascript" src="./js/view.js"></script>
+    <script type="text/javascript" src="./js/controller.js"></script>
+    <script type="text/javascript" src="./js/panel.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+  </head>
+  <body>
+    <div id="draw_area" class="left_panel"></div>
+
+    <div class="right_panel">
+      <h1>Quick Shop</h1>
+      <h3>Shopping experience optimizer</h3>
+
+      <form action="">
+        <input type="radio" name="selectionRadio" id="selectedWall" checked> Wall<br>
+        <input type="radio" name="selectionRadio" id="selectedItem"> Item<br>
+      </form>
+    </div>
+
+   </body>
 </html>

@@ -121,11 +121,11 @@ $.extend(Controller, {
         // => ready
     },
     ondrawWall: function(event, from, to, gridX, gridY) {
-        this.setWalkableAt(gridX, gridY, false);
+        this.setWallorItem(gridX,gridY);
         // => drawingWall
     },
     oneraseWall: function(event, from, to, gridX, gridY) {
-        this.setWalkableAt(gridX, gridY, true);
+        this.eraseWallorItem(gridX,gridY);
         // => erasingWall
     },
     onsearch: function(event, from, to) {
@@ -386,16 +386,15 @@ $.extend(Controller, {
             gridX = coord[0],
             gridY = coord[1],
             grid  = this.grid;
-
-        $.get("/setWall", {
-            "x": gridX,
-            "y": gridY
-        });
-        $.get("/setItem", {
-            "x": gridX,
-            "y": gridY
-        });
-
+        
+        //$.get("/setWall", {
+        //    "x": gridX,
+        //    "y": gridY
+        //});
+        //$.get("/setItem", {
+        //    "x": gridX,
+        //    "y": gridY
+        //});
         //window.alert(gridX + " " + gridY);
 
         if (this.can('dragStart') && this.isStartPos(gridX, gridY)) {
@@ -436,10 +435,10 @@ $.extend(Controller, {
             }
             break;
         case 'drawingWall':
-            this.setWalkableAt(gridX, gridY, false);
+            this.setWallorItem(gridX, gridY);
             break;
         case 'erasingWall':
-            this.setWalkableAt(gridX, gridY, true);
+            this.eraseWallorItem(gridX, gridY);
             break;
         }
     },
@@ -475,19 +474,11 @@ $.extend(Controller, {
      */
     setDefaultStartEndPos: function() {
         var width, height,
-            marginRight, availWidth,
-            centerX, centerY,
             endX, endY,
             nodeSize = View.nodeSize;
 
         width  = $(window).width();
         height = $(window).height();
-
-        marginRight = $('#algorithm_panel').width();
-        availWidth = width - marginRight;
-
-        centerX = Math.ceil(availWidth / 2 / nodeSize);
-        centerY = Math.floor(height / 2 / nodeSize);
 
         var numRows = matrix.length;
         var numCols = matrix[0].length;
@@ -513,6 +504,43 @@ $.extend(Controller, {
                 }
 
             }
+        }
+    },
+    setWallorItem: function(gridX, gridY)
+    {
+        if(document.getElementById('selectedWall').checked)
+        {
+            this.setClosedAt(gridX, gridY, false);
+            $.get("/setWall", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        else
+        {
+            this.setWalkableAt(gridX, gridY, false);
+            $.get("/setItem", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+    },
+    eraseWallorItem: function(gridX, gridY)
+    {
+        this.setWalkableAt(gridX, gridY, true);
+        if(document.getElementById('selectedWall').checked)
+        {   
+            $.get("/eraseWall", {
+                "x": gridX,
+                "y": gridY
+            });
+        }
+        else
+        {   
+            $.get("/eraseItem", {
+                "x": gridX,
+                "y": gridY
+            });
         }
     },
     setStartPos: function(gridX, gridY) {
