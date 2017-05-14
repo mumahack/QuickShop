@@ -5,7 +5,7 @@ var reload = require('reload')
 var bodyParser = require('body-parser')
 var logger = require('morgan')
 var low = require('lowdb')
-var solver = require('node-tspsolver');
+
 var app = express()
 
 var quickSolver = require('./quicksolver/quicksolver.js');

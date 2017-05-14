@@ -1,6 +1,7 @@
 var Random = require("random-js");
 var PF = require('pathfinding');
 require("./Point.js");
+var solver = require('node-tspsolver');
 const columns = 30;
 
 
@@ -29,7 +30,7 @@ module.exports = {
         for (var i = 0; i < 3; i++) {
             var point = this.generateRandomPoint();
             this.setPoint(point, 1);
-            //this.passPoints.push(point);
+            this.passPoints.push(point);
         }
         this.generateNavigationPoints();
 
@@ -77,18 +78,18 @@ module.exports = {
         var costMatrix = [[]];
         for (var passPointNr1 = 0; passPointNr1 < this.passPoints.length; passPointNr1++) {
             var currentPoint = this.passPoints[passPointNr1];
-            costMatrix[passPointNr1] =  [];
+            costMatrix[passPointNr1] = [];
             for (var passPointNr2 = 0; passPointNr2 < this.passPoints.length; passPointNr2++) {
                 var targetPoint = this.passPoints[passPointNr2];
                 if (passPointNr1 == passPointNr2) {
                     // Do Nothing...
                 } else {
-                    console.log("Generating Navigation Points for "+ targetPoint.x+":"+targetPoint.y);
+                    //console.log("Generating Navigation Points for "+ targetPoint.x+":"+targetPoint.y);
                     var navigationPoints = this.solveNavigation(currentPoint, targetPoint);
                     for (var i = 0, len = navigationPoints.length; i < len; i++) {
                         var coordinates = navigationPoints[i];
                         var point = new Point(coordinates[0], coordinates[1]);
-                        currentPoint.addPath(targetPoint,point);
+                        currentPoint.addPath(targetPoint, point);
                     }
                 }
                 // Fill Cost Array:
@@ -96,8 +97,28 @@ module.exports = {
                 costMatrix[passPointNr1][passPointNr2] = currentPoint.getPathLen(targetPoint);
             }
         }
-        console.log(costMatrix);
 
+        var self = this;
+        solver
+            .solveTsp(costMatrix, true, {})
+            .then(function (result) {
+
+
+                //console.log(result);
+                for (var i = 0, len = result.length - 1; i < len; i++) {
+
+                    var currentPointID = result[i];
+                    var targetPointID = result[i + 1];
+
+                    var currentPoint = self.passPoints[currentPointID];
+                    var targetPoint = self.passPoints[targetPointID];
+                    var paths = currentPoint.getPaths(targetPoint);
+                    for (var pathId = 0; pathId < paths.length; pathId++) {
+                        self.setPoint(paths[pathId], 5);
+                    }
+                }
+
+            });
 
 
     },
@@ -117,9 +138,9 @@ module.exports = {
         //console.log(point1[0], point1[1], point2[0], point2[1]);
         var finder = new PF.AStarFinder();
         var pointsArr = finder.findPath(point1.x, point1.y, point2.x, point2.y, grid);
-        console.log("PointsArr");
-        console.log(pointsArr);
-        console.log("PointsArr End");
+        //console.log("PointsArr");
+        //console.log(pointsArr);
+        //console.log("PointsArr End");
         return pointsArr;
     }
 }
