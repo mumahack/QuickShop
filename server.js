@@ -45,23 +45,35 @@ app.get('/js/matrix.js', function (req, res) {
 app.get('/setWall', function (req, res) {
     var x = req.param('x');
     var y = req.param('y');
-
-
     var query = "matrix[" + y + "][" + x + "]";
-    var oldValue = db.get(query).value();
-    if(oldValue == 1){
-        db.set(query, 0).write();
-    }else {
-        db.set(query, 1).write();
-    }
-
-
-    //console.log(oldValue);
-    //.assign(5).write();
+    db.set(query, 1).write();
     res.send(x + " " + y);
-
-
 })
+
+app.get('/setItem', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 4).write();
+    res.send(x + " " + y);
+})
+app.get('/eraseWall', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 0).write();
+    res.send(x + " " + y);
+})
+app.get('/eraseItem', function (req, res) {
+    var x = req.param('x');
+    var y = req.param('y');
+    var query = "matrix[" + y + "][" + x + "]";
+    db.set(query, 0).write();
+    res.send(x + " " + y);
+})
+
+
+
 
 app.get('/solver', function (req, res) {
 
