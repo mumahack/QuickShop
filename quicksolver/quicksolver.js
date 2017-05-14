@@ -71,8 +71,6 @@ module.exports = {
 
             }
         }
-        console.log("First Point: " + this.startPoint.getHash()  + " StopPoint: "+ this.stopPoint.getHash() + " passpoints:" + + this.passPoints)
-
         this.generateNavigationPoints();
 
         return this.map;
@@ -178,14 +176,13 @@ module.exports = {
             var combination = cmb[combinationNumber];
             var currentPathLen = 0;
 
-            if (combination[0].getHash() !== this.startPoint.getHash() || combination[combination.length-1].getHash() !== this.stopPoint.getHash()) {
+            if (!(combination[0].getHash() == this.startPoint.getHash() && combination[combination.length - 1].getHash() == this.stopPoint.getHash())) {
                 continue;
             }
 
             for (var elementCounter = 0; elementCounter < combination.length - 1; elementCounter++) {
                 currentPoint = combination[elementCounter];
                 targetPoint = combination[elementCounter + 1];
-                console.log("Element counter" + elementCounter + " First point:"+ currentPoint.getHash() + "  start point:" + this.startPoint.getHash());
                 currentPathLen += currentPoint.getPathLen(targetPoint);
             }
             if (currentPathLen < shortestPath) {
