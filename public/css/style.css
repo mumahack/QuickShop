@@ -44,6 +44,12 @@ h3 {
     width: 500px;
 }
 
+button {
+    background-color: #F8F8F8;
+    border-radius: 3px;
+    border: 2px solid #000000;
+}
+
 .right_panel {
    float:right;
    width: 40%;

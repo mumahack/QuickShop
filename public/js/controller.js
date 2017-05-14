@@ -542,7 +542,7 @@ $.extend(Controller, {
     setStartPos: function(gridX, gridY) {
         if(this.startX) {
             this.setNormalAt(this.startX,this.startY);
-            $.get("/eraseStartPos", {
+            $.get("/erase", {
                     "x": this.startX,
                     "y": this.startY
                 });
@@ -554,7 +554,7 @@ $.extend(Controller, {
     setEndPos: function(gridX, gridY) {
         if(this.endX) {
             this.setNormalAt(this.endX, this.endY);
-            $.get("/eraseEndPos", {
+            $.get("/erase", {
                     "x": this.endX,
                     "y": this.endY
                 });
