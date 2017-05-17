@@ -5,4 +5,4 @@ nodejs > v6
 run: nodejs server.js
 access: http://localhost:3000
 
-3rd price winner of the 7Hack 2017
+3rd place on the 7Hack (2017)
